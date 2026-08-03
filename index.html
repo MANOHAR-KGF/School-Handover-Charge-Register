@@ -292,6 +292,7 @@
     .section-head{background:#f0ece0 !important; border-left-color:#999 !important;}
     .section-head .icon{background:#999 !important; color:#fff !important;}
     footer.note{display:none;}
+    .no-print{display:none !important;}
   }
   body.printing .section{ display:block !important; }
   body.printing .tabs, body.printing .topbar{ display:none !important; }
@@ -789,19 +790,39 @@ function showToast(msg){
   setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
-/* ================= PRINT (all 5 forms, not just the open tab) ================= */
-function printAll(){
-  // Force every section visible as a fail-safe alongside the @media print rules,
-  // so all forms print no matter which tab was open or how the browser handles
-  // dynamically-hidden elements during print.
-  document.body.classList.add("printing");
-  window.print();
+/* ================= PRINT (ALL tabs/sections together, every time) ================= */
+/* We force visibility with inline !important styles set directly via JS (not just
+   CSS classes), because inline !important always wins the cascade — this guarantees
+   every section prints together even if this page is embedded somewhere (e.g. a
+   blog template) that has its own conflicting CSS for generic class names. */
+function setPrintMode(on){
+  document.body.classList.toggle("printing", on);
+
+  // Every form/section must be visible together, regardless of which tab was open
+  document.querySelectorAll("#sections .section").forEach(sec => {
+    if(on) sec.style.setProperty("display", "block", "important");
+    else sec.style.removeProperty("display");
+  });
+
+  // Things that should never appear on the printed page
+  document.querySelectorAll(".topbar, .tabs, .toast, .add-row-wrap, .del-row").forEach(el => {
+    if(on) el.style.setProperty("display", "none", "important");
+    else el.style.removeProperty("display");
+  });
 }
-window.addEventListener("afterprint", () => document.body.classList.remove("printing"));
+
+function printAll(){
+  setPrintMode(true);
+  window.print();
+  // window.print() blocks in most desktop browsers until the dialog closes,
+  // so this runs right after; afterprint below covers browsers where it doesn't.
+  setPrintMode(false);
+}
+window.addEventListener("afterprint", () => setPrintMode(false));
 // Fallback for browsers/webviews that don't fire afterprint reliably
 if (window.matchMedia) {
   const mq = window.matchMedia("print");
-  mq.addEventListener?.("change", (e) => { if(!e.matches) document.body.classList.remove("printing"); });
+  mq.addEventListener?.("change", (e) => { if(!e.matches) setPrintMode(false); });
 }
 
 document.getElementById("printBtn").addEventListener("click", printAll);
@@ -820,37 +841,6 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 /* ================= INIT ================= */
 loadSaved();
 </script>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-<head>
-    <meta charset="UTF-8">
-    <!-- ಇದು ಮೊಬೈಲ್‌ನಲ್ಲಿಯೂ ಡೆಸ್ಕ್‌ಟಾಪ್ ವ್ಯೂ ಬರುವುದನ್ನು ಖಚಿತಪಡಿಸುತ್ತದೆ -->
-    <meta name="viewport" content="width=1200, initial-scale=1.0">
-    <title>ನಿಮ್ಮ ಪೇಜ್ ಶೀರ್ಷಿಕೆ</title>
-</head>
-
-
-
-
-
-
-<style>
-@media print{
-  .no-print{
-    display:none !important;
-  }
-}
-</style>
 
 <div class="no-print" style="text-align:center;margin:15px 0;">
   <a href="https://bilingualmediumschools.blogspot.com/2026/04/home-page.html"
@@ -867,3 +857,6 @@ loadSaved();
     🌐 School Resource Centre – Click Here to Visit
   </a>
 </div>
+
+</body>
+</html>
