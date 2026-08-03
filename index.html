@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>ಶಾಲಾ ವಿಶಿಷ್ಟ ಚಾರ್ಜಿನ ವಿವರ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;500;600;700;800&family=Noto+Serif+Kannada:wght@500;600;700&family=Roboto+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF7EE;
+    --paper-line:#E4DBC6;
+    --ink:#2A241C;
+    --ink-soft:#6B6152;
+    --maroon:#7A2331;
+    --maroon-deep:#571622;
+    --gold:#B8863E;
+    --gold-soft:#EADFC2;
+    --green-ok:#3E6B4F;
+    --shadow: 0 1px 2px rgba(42,36,28,.06), 0 8px 24px rgba(42,36,28,.08);
+    --radius: 10px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #fffdf7 0%, transparent 60%),
+      var(--paper);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:'Noto Sans Kannada','Noto Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:sticky; top:0; z-index:40;
+    background:linear-gradient(180deg, var(--maroon) 0%, var(--maroon-deep) 100%);
+    color:#F6EEDD;
+    padding:14px 18px;
+    box-shadow:var(--shadow);
+  }
+  .topbar-inner{
+    max-width:980px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+  }
+  .seal{
+    width:34px;height:34px;border-radius:50%;
+    border:2px solid #E7C878; display:flex;align-items:center;justify-content:center;
+    font-family:'Noto Serif Kannada',serif; font-weight:700; font-size:15px; color:#E7C878;
+    flex-shrink:0;
+  }
+  .brand h1{
+    font-family:'Noto Serif Kannada',serif;
+    font-size:16px; margin:0; line-height:1.25; font-weight:700; letter-spacing:.2px;
+  }
+  .brand p{margin:1px 0 0; font-size:11.5px; color:#D9C79E; letter-spacing:.5px;}
+
+  .actions{display:flex; gap:8px; flex-wrap:wrap;}
+  .btn{
+    appearance:none; border:1px solid rgba(231,200,120,.55);
+    background:rgba(255,255,255,.06);
+    color:#F6EEDD; padding:8px 14px; border-radius:8px;
+    font-family:inherit; font-size:13px; font-weight:600; cursor:pointer;
+    display:flex; align-items:center; gap:6px;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .btn:hover{background:rgba(255,255,255,.15);}
+  .btn:active{transform:scale(.97);}
+  .btn.primary{background:#E7C878; color:var(--maroon-deep); border-color:#E7C878;}
+  .btn.primary:hover{background:#F0D797;}
+  .btn.danger{border-color:rgba(255,255,255,.25);}
+  .btn svg{width:15px;height:15px;flex-shrink:0;}
+
+  .save-status{
+    font-size:11.5px; color:#D9C79E; display:flex; align-items:center; gap:6px; padding:0 2px;
+  }
+  .save-dot{width:7px;height:7px;border-radius:50%;background:#8FBF9B;flex-shrink:0;}
+
+  /* ===== Header form (school identity) ===== */
+  .wrap{max-width:980px; margin:22px auto; padding:0 14px;}
+
+  .id-card{
+    background:#FFFEFA; border:1px solid var(--paper-line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:18px 20px; margin-bottom:22px;
+    position:relative; overflow:hidden;
+  }
+  .id-card::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:5px;
+    background:linear-gradient(180deg, var(--maroon), var(--gold));
+  }
+  .id-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:14px 20px; padding-left:8px;
+  }
+  .id-field{display:flex; flex-direction:column; gap:5px;}
+  .id-field label{
+    font-size:12px; color:var(--ink-soft); font-weight:600; letter-spacing:.2px;
+  }
+  .id-field input{
+    border:none; border-bottom:1.5px solid var(--paper-line);
+    background:transparent; font-family:'Noto Serif Kannada',serif;
+    font-size:15.5px; font-weight:600; color:var(--ink);
+    padding:4px 2px 7px; outline:none; transition:border-color .15s;
+  }
+  .id-field input:focus{border-bottom-color:var(--maroon);}
+  .id-field.full{grid-column:1 / -1;}
+  .doc-title{
+    text-align:center; font-family:'Noto Serif Kannada',serif; font-weight:700;
+    font-size:19px; color:var(--maroon-deep); margin:0 0 16px; padding-left:8px;
+    letter-spacing:.2px;
+  }
+
+  /* ===== Tabs ===== */
+  .tabs{
+    display:flex; gap:6px; overflow-x:auto; padding:4px 2px 12px;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex-shrink:0; padding:9px 16px; border-radius:999px; border:1px solid var(--paper-line);
+    background:#FFFEFA; color:var(--ink-soft); font-size:13px; font-weight:600;
+    cursor:pointer; white-space:nowrap; transition:all .15s ease;
+  }
+  .tab .n{color:var(--gold); margin-right:5px; font-family:'Roboto Mono',monospace; font-size:11px;}
+  .tab{ --accent: var(--maroon); }
+  .tab.active{
+    background:var(--accent); color:#F6EEDD; border-color:var(--accent);
+    box-shadow:0 4px 10px rgba(0,0,0,.18);
+  }
+  .tab.active .n{color:#F3DFA6;}
+
+  /* ===== Section / table ===== */
+  .section{
+    --accent: var(--maroon);
+    display:none; background:#FFFEFA; border:1px solid var(--paper-line);
+    border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
+    animation:fade .25s ease;
+  }
+  .section.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+  .section-head{
+    background:var(--gold-soft); padding:13px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    border-bottom:1px solid var(--paper-line);
+    border-left:5px solid var(--accent);
+  }
+  .section-head .htitle{display:flex; align-items:center; gap:10px; min-width:0;}
+  .section-head .icon{
+    width:34px; height:34px; border-radius:9px; flex-shrink:0;
+    background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-size:17px; box-shadow:0 3px 8px rgba(0,0,0,.15);
+  }
+  .section-head h2{
+    margin:0; font-family:'Noto Serif Kannada',serif; font-size:15.5px; color:var(--maroon-deep); font-weight:700;
+  }
+  .section-count{font-size:11.5px; color:var(--ink-soft); font-family:'Roboto Mono',monospace; flex-shrink:0;}
+
+  .row{
+    display:flex; align-items:center; gap:12px;
+    padding:10px 18px; border-bottom:1px solid var(--paper-line);
+  }
+  .row:nth-child(even){background:#FBF7EE;}
+  .row:last-child{border-bottom:none;}
+  .row .idx{
+    font-family:'Roboto Mono',monospace; font-size:12px; color:var(--accent);
+    width:26px; flex-shrink:0; text-align:right; font-weight:700;
+  }
+  .row .label{flex:1; font-size:14px; line-height:1.45; color:var(--ink);}
+  .row .qty-wrap{flex-shrink:0; display:flex; gap:8px; align-items:flex-end;}
+  .row .qty-wrap .qty-col{display:flex; flex-direction:column; align-items:center;}
+  .row .qty-wrap .qty-cap{font-size:9px; color:var(--ink-soft); margin-bottom:2px; letter-spacing:.2px; text-align:center;}
+  .row input[type="text"]{
+    width:64px; text-align:center; padding:7px 5px; border-radius:7px;
+    border:1.5px solid var(--paper-line); background:#fff;
+    font-family:'Roboto Mono',monospace; font-size:14px; font-weight:600; color:var(--maroon-deep);
+    outline:none; transition:border-color .15s, box-shadow .15s;
+  }
+  .row input[type="text"]:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(0,0,0,.08);}
+  .row input[type="text"]::placeholder{color:#C9BFA9; font-weight:400;}
+
+  /* ===== Column headers (ಸುಸ್ಥಿತಿ / ಶಿಥಿಲ) shown once per section ===== */
+  .col-headers{
+    display:flex; align-items:center; gap:12px;
+    padding:8px 18px; background:var(--gold-soft); border-bottom:1px solid var(--paper-line);
+  }
+  .col-headers .idx-sp{width:26px; flex-shrink:0;}
+  .col-headers .label-sp{flex:1;}
+  .col-headers .heads{flex-shrink:0; display:flex; gap:8px;}
+  .col-headers .heads span{
+    width:64px; text-align:center; font-size:10.5px; font-weight:700; color:var(--maroon-deep);
+    letter-spacing:.2px; line-height:1.25;
+  }
+
+  /* ===== School name banner shown at top of every section/page ===== */
+  .section-school-line{
+    padding:9px 18px; background:#FFFEFA; border-bottom:1px dashed var(--paper-line);
+    font-size:12.5px; color:var(--ink-soft); font-weight:600;
+  }
+  .section-school-line .lbl{color:var(--ink-soft); font-weight:600;}
+  .section-school-line .val{
+    color:var(--maroon-deep); font-family:'Noto Serif Kannada',serif; font-weight:700; font-size:13.5px;
+    margin-left:4px;
+  }
+  .section-school-line .val:empty::after{content:"—"; color:#C9BFA9; font-weight:400;}
+
+  /* ===== Custom (user-added) rows ===== */
+  .row.custom-row{background:#FFF8EA;}
+  .row.custom-row .idx{color:var(--accent); font-size:15px;}
+  .custom-label{
+    flex:1; font-size:14px; font-family:'Noto Sans Kannada',sans-serif; color:var(--ink);
+    border:1.5px dashed var(--paper-line); border-radius:7px; padding:7px 10px; background:#fff;
+    outline:none; transition:border-color .15s;
+  }
+  .custom-label:focus{border-color:var(--accent); border-style:solid;}
+  .del-row{
+    flex-shrink:0; width:28px; height:28px; border-radius:50%; border:1px solid var(--paper-line);
+    background:#fff; color:#A6452F; font-size:14px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background .15s, transform .1s;
+  }
+  .del-row:hover{background:#FBEAE4;}
+  .del-row:active{transform:scale(.9);}
+
+  .add-row-wrap{padding:12px 18px 16px; background:#FBF7EE;}
+  .add-row-btn{
+    width:100%; padding:11px; border-radius:9px; border:1.5px dashed var(--accent);
+    background:#fff; color:var(--accent); font-family:inherit; font-weight:700; font-size:13.5px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px;
+    transition:background .15s, transform .1s;
+  }
+  .add-row-btn:hover{background:var(--gold-soft);}
+  .add-row-btn:active{transform:scale(.99);}
+  .add-row-btn .plus{
+    width:19px;height:19px;border-radius:50%;background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;
+  }
+
+  footer.note{
+    max-width:980px; margin:18px auto 0; padding:0 16px 10px;
+    font-size:11.5px; color:var(--ink-soft); text-align:center; line-height:1.6;
+  }
+
+  /* ===== Toast ===== */
+  .toast{
+    position:fixed; left:50%; bottom:20px; transform:translate(-50%, 20px);
+    background:var(--ink); color:#F6EEDD; padding:10px 18px; border-radius:999px;
+    font-size:13px; font-weight:600; box-shadow:var(--shadow); opacity:0; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease; z-index:100;
+    display:flex; align-items:center; gap:8px;
+  }
+  .toast.show{opacity:1; transform:translate(-50%, 0);}
+
+  /* ===== Mobile ===== */
+  @media (max-width:640px){
+    .id-grid{grid-template-columns:1fr;}
+    .brand h1{font-size:14px;}
+    .brand p{font-size:10.5px;}
+    .btn{padding:8px 11px; font-size:12px;}
+    .btn .label-txt{display:none;}
+    .doc-title{font-size:16.5px;}
+    .row .label{font-size:13.3px;}
+    .row input[type="text"]{width:44px; padding:7px 3px; font-size:12.5px;}
+    .col-headers .heads span{width:44px; font-size:9px;}
+    .section-school-line{font-size:11.5px;}
+    .section-school-line .val{font-size:12px;}
+  }
+
+  /* ===== Print ===== */
+  /* body.printing is toggled by JS right before window.print() as a fail-safe
+     for browsers/webviews that don't fully honour @media print on dynamically
+     hidden elements — this guarantees ALL sections are visible when printing,
+     not just the currently open tab. */
+  @media print{
+    *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    body{background:#fff !important; padding:0;}
+    .topbar, .tabs, .toast, .add-row-wrap, .del-row{display:none !important;}
+    .wrap{margin:0; padding:0; max-width:100%;}
+    .id-card{box-shadow:none; border:1px solid #999; margin-bottom:14px; break-inside:avoid;}
+    #sections .section{
+      display:block !important; box-shadow:none; border:1px solid #999;
+      margin-bottom:0; break-inside:avoid-page;
+    }
+    #sections .section{ page-break-before:always; }
+    #sections .section:first-child{ page-break-before:avoid; }
+    .row{break-inside:avoid;}
+    .row input[type="text"], .custom-label{border:1px solid #999 !important; box-shadow:none !important; background:#fff !important;}
+    .section-head{background:#f0ece0 !important; border-left-color:#999 !important;}
+    .section-head .icon{background:#999 !important; color:#fff !important;}
+    footer.note{display:none;}
+  }
+  body.printing .section{ display:block !important; }
+  body.printing .tabs, body.printing .topbar{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="seal">ಶಾ</div>
+      <div>
+        <h1>ಶಾಲಾ ವಿಶಿಷ್ಟ ಚಾರ್ಜಿನ ವಿವರ</h1>
+        <p>School Handover / Charge Register</p>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="save-status" id="saveStatus"><span class="save-dot"></span><span id="saveStatusText">ಸಿದ್ಧ</span></span>
+      <button class="btn" id="printBtn" title="Print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span class="label-txt">ಮುದ್ರಿಸಿ</span></button>
+      <button class="btn danger" id="resetBtn" title="Reset"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg><span class="label-txt">ಮರುಹೊಂದಿಸಿ</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="id-card">
+    <div class="id-grid">
+      <div class="id-field">
+        <label>ಶಾಲೆಯ ಹೆಸರು (School Name)</label>
+        <input type="text" id="f_school" placeholder="ಸರ್ಕಾರಿ ಹಿರಿಯ ಪ್ರಾಥಮಿಕ ಶಾಲೆ ...">
+      </div>
+      <div class="id-field">
+        <label>ಕ್ಲಸ್ಟರ್ (Cluster)</label>
+        <input type="text" id="f_cluster" placeholder="ಕ್ಲಸ್ಟರ್ ಹೆಸರು">
+      </div>
+      <div class="id-field">
+        <label>ತಾಲ್ಲೂಕು (Taluk)</label>
+        <input type="text" id="f_taluk" placeholder="ತಾ.">
+      </div>
+      <div class="id-field">
+        <label>ದಿನಾಂಕ (Date)</label>
+        <input type="date" id="f_date">
+      </div>
+      <div class="id-field full">
+        <label>ಹಸ್ತಾಂತರಿಸುವವರು / ಸ್ವೀಕರಿಸುವವರು (Handed over by / Received by)</label>
+        <input type="text" id="f_persons" placeholder="ಹೆಸರುಗಳು">
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div id="sections"></div>
+
+  <footer class="note">ಎಲ್ಲಾ ನಮೂದುಗಳು ಈ ಸಾಧನದಲ್ಲಿ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಉಳಿಸಲ್ಪಡುತ್ತವೆ · All entries are saved automatically on this device</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= DATA ================= */
+const SECTIONS = [
+  {
+    id: "vahigalu",
+    title: "1. ಶಾಲೆಯ ವಹಿಗಳ ವಿವರ",
+    qcap: "ಸಂಖ್ಯೆ",
+    items: [
+      "ಸಮುದಾಯದತ್ತ ಶಾಲಾ ಕಾರ್ಯಕ್ರಮ ವಹಿ",
+      "ಶಿಕ್ಷಕರ ಹಾಜರಾತಿ ಪ್ರಮಾಣಪತ್ರ ವಹಿ",
+      "'ಗೆ' ವಹಿ",
+      "'ಇಂದ' ವಹಿ",
+      "ಶಾಲಾ ಆಸ್ತಿ ವಹಿ",
+      "ಶಿಕ್ಷಣ ನಿಧಿಯ ಯೂನಿಯನ್ ಖರ್ಚಿನ ಓಚರ್ಸ್ ಫೈಲ್",
+      "ಎಸ್.ಡಿ.ಎಂ.ಸಿ ಖಾತೆಯ ಎಸ್.ಬಿ.ಖ ಖರ್ಚಿನ ಓಚರ್ಸ್ ಫೈಲ್",
+      "ಅಕ್ಷರದಾಸೋಹ ಯೂನಿಯನ್ ಖರ್ಚಿನ ಓಚರ್ಸ್ ಫೈಲ್",
+      "ಜೀರೋ ಅಕೌಂಟ್ ಕೆನರಾ ಬ್ಯಾಂಕ್ ಓಚರ್ಸ್ ಫೈಲ್",
+      "ವಿಶಿಷ್ಟ ಚಾರ್ಜಿನ ವಹಿ",
+      "ಆಧಾರ್ ಪ್ರತಿ, ಜಾತಿ ಪ್ರಮಾಣ ಪತ್ರಗಳ ವಹಿ",
+      "ಸ್ಕಾಲರ್‌ಶಿಪ್ (ಸ್ಕಾಟ್ಸ್) ವಹಿ",
+      "ಶಿಕ್ಷಣ ದತ್ತಿ ಬಾಂಡ್",
+      "ಸಂದರ್ಶಕರ ಭೇಟಿ ವರದಿ ಫೈಲ್",
+      "ಶಾಲಾ ತಪಾಸಣಾ ವರದಿ ವಹಿ",
+      "ಮಕ್ಕಳ ಹಾಜರಾತಿ ವಹಿ",
+      "ವಿದ್ಯಾಗಮ ವಹಿ",
+      "ಅಕ್ಷರದಾಸೋಹ, ಕ್ಷೀರಭಾಗ್ಯ, ರಾಗಿ ಮಾಲ್ಟ್, ಮೊಟ್ಟೆ ಬೇಡಿಕೆ, ಬಳಕೆ, ಪಡೆಯುವಿಕೆ ವಹಿ",
+      "ಹರಾಜು ವಹಿ",
+      "ಕ್ರೀಡಾಕೂಟದ ವಹಿ",
+      "ಶಿಕ್ಷಕರ ವರ್ಗಾವಣೆ ವಹಿ",
+      "ಟಿ.ಸಿ.ಗಳ ವಹಿ",
+      "ಅತಿಥಿ ಶಿಕ್ಷಕರ ನಿರ್ವಹಣಾ ವಹಿ",
+      "ಶಾಲಾ ತಪಾಸಣೆ ವಹಿ",
+      "ಆಸ್ತಿ ಮೀಟರ್",
+      "ಇಕೋ ಕ್ಲಬ್ ವರದಿಗಳು"
+    ]
+  },
+  {
+    id: "vastugalu",
+    title: "2. ಶಾಲೆಯ ವಸ್ತುಗಳ ವಿವರ",
+    qcap: "ಸಂಖ್ಯೆ",
+    items: [
+      "ಸೌಂಡ್ ಸಿಸ್ಟಂ ಡೆಕ್",
+      "ಮೈಕ್ ಸೆಟ್",
+      "ಸೌಂಡ್ ಹಾರ್ನ್ಸ್",
+      "ಎಜುಸ್ಯಾಟ್ ಟಿವಿ, ಸೋಲಾರ್, ಟಿ.ವಿ",
+      "ಸ್ಮಾರ್ಟ್ ಟಿವಿ, ರಿಮೋಟ್, ಪೆನ್ ಡ್ರೈವ್",
+      "ಬೀರುಗಳು",
+      "ಗ್ರಂಥಾಲಯ ಬೀರು",
+      "ಡೆಸ್ಕ್ ಬಿನ್ ದೊಡ್ಡವು",
+      "ಡೆಸ್ಕ್ ಬಿನ್ ಚಿಕ್ಕವು",
+      "ಕಬ್ಬಿಣದ ಬೆಂಚ್‌ಗಳು",
+      "ಮರದ ಬೆಂಚ್‌ಗಳು",
+      "ಮರದ ಟೇಬಲ್",
+      "ಕಬ್ಬಿಣದ ಚೇರ್‌ಗಳು",
+      "ಮರದ ಚೇರ್‌ಗಳು",
+      "ಪ್ಲಾಸ್ಟಿಕ್ ಚೇರ್‌ಗಳು",
+      "ಕುಷನ್ ಚೇರ್‌ಗಳು",
+      "ಟ್ರಂಕ್",
+      "ಗಣಿತ ಕಿಟ್",
+      "ವಿಜ್ಞಾನ ಕಿಟ್",
+      "ನಲಿಕಲಿ ಕಿಟ್",
+      "ನಲಿಕಲಿ ಚಾರ್ಟ್‌ಗಳು",
+      "ನಲಿಕಲಿ ಸಲಕರಣೆಗಳು",
+      "ಪ್ಯಾನಲ್ ಬೋರ್ಡ್",
+      "ಸ್ಕೇಲ್",
+      "ಶಾಟ್ ಫುಟ್",
+      "ಡಿಸ್ಕಸ್",
+      "ಗ್ಲೋಬ್",
+      "ಭೂಪಟಗಳು",
+      "ಮಣೆಗಳು",
+      "ಜಮಖಾನ ದೊಡ್ಡದು",
+      "ಜಮಖಾನ ಚಿಕ್ಕದು",
+      "ಕಾರ್ಡ್ ಜೋಡಿಸುವ ಬ್ಯಾಗ್",
+      "ನಲಿಕಲಿ ರೌಂಡ್ ಟೇಬಲ್",
+      "ನಲಿಕಲಿ ಪ್ಲಾಸ್ಟಿಕ್ ಚೇರ್",
+      "ನಲಿಕಲಿ ಟ್ರೇಗಳು",
+      "ಡೆಸ್ಕ್ ಟಾಪ್ - ಸಿ.ಪಿ.ಯು",
+      "ಮಾನಿಟರ್",
+      "ಮೌಸ್",
+      "ಕೀ ಬೋರ್ಡ್",
+      "ಕಲರ್ ಪ್ರಿಂಟರ್ ಕ್ಯಾನಾನ್",
+      "ಪ್ರಿಂಟರ್ ಹಳೆಯದು",
+      "ಪವರ್‌ಪಾಯಿಂಟ್ ಶೋ ಪರದೆ",
+      "ಡೆಸ್ಕ್ ಮರದ್ದು",
+      "ಡಂಬಲ್ಸ್",
+      "ಲೆಜಿಮ್ಸ್",
+      "ವೇಯಿಂಗ್ ಮಿಷನ್",
+      "ರಾಷ್ಟ್ರ ನಾಯಕರ, ಕವಿಗಳ ಭಾವಚಿತ್ರಗಳು",
+      "ಗಡಿಯಾರಗಳು",
+      "ರಾಷ್ಟ್ರ ಧ್ವಜ",
+      "ಬ್ಯಾಂಡ್ ಸೆಟ್ ದೊಡ್ಡದು",
+      "ಬ್ಯಾಂಡ್ ಸ್ಟಿಕ್",
+      "ಬ್ಯಾಂಡ್ ಸೆಟ್ ಚಿಕ್ಕದು",
+      "ಆರೆಕೋಲು",
+      "ಸೆನಕೆ",
+      "ಗುದ್ದಲಿ",
+      "ಕರನೆ",
+      "ಬಾಂಡ್ಲಿ",
+      "ಸುತ್ತಿಗೆ",
+      "ಸ್ಕ್ರೂ ಡ್ರೈವರ್",
+      "ಜಮಖಾನ 12x18",
+      "ಕುಡುಗೋಲು",
+      "ಕಂಪ್ಯೂಟರ್ ಕಂಪಾರ್ಟ್‌ಮೆಂಟ್",
+      "ಗ್ರಂಥಾಲಯದ ಪುಸ್ತಕಗಳು",
+      "ಕ್ರೀಡಾ ಸಾಮಗ್ರಿಗಳು",
+      "ಕೋಲಾಟದ ಕಡ್ಡಿಗಳು"
+    ]
+  },
+  {
+    id: "vahimastaka",
+    title: "3. ಶಾಲೆಯ ವಹಿ-ಪುಸ್ತಕಗಳ ವಿವರ",
+    qcap: "ಸಂಖ್ಯೆ",
+    items: [
+      "ದಾಖಲಾತಿ ಪುಸ್ತಕಗಳು (Admission Registers)",
+      "ಕ್ರೋಢೀಕೃತ ಅಂಕವಹಿ",
+      "ಅನುಪಾಲನ ವಹಿ",
+      "ಶಿಕ್ಷಕರ ಜ್ಞಾಪನ ಪುಸ್ತಕ",
+      "ಇಲಾಖಾ ಅಧಿಕಾರಿಗಳ ಸಂದರ್ಶನ ಪುಸ್ತಕ",
+      "ಇಲಾಖೇತರ ಅಧಿಕಾರಿಗಳ ಸಂದರ್ಶನ ಪುಸ್ತಕ",
+      "ಎಸ್.ಡಿ.ಎಂ.ಸಿ ಜ್ಞಾಪನ",
+      "ಎಸ್.ಡಿ.ಎಂ.ಸಿ ನಡಾವಳಿ",
+      "ಮುಖ್ಯಶಿಕ್ಷಕರ ಚಲನ-ವಲನ ಪುಸ್ತಕ",
+      "ಗ್ರಂಥಾಲಯ ದಾಸ್ತಾನು ಪುಸ್ತಕ",
+      "ಗ್ರಂಥಾಲಯ ವಿತರಣಾ ಪುಸ್ತಕ",
+      "ರಾಷ್ಟ್ರೀಯ ಹಬ್ಬಗಳ ಆಚರಣಾ ಪುಸ್ತಕ",
+      "ಸಾಮಾನ್ಯ ದಾಸ್ತಾನು ಪುಸ್ತಕ",
+      "ಟಿ.ಸಿ. ವಿತರಣಾ ಪುಸ್ತಕ",
+      "ಶೂ-ಸಾಕ್ಸ್ ವಿತರಣಾ ಪುಸ್ತಕ",
+      "ಉಚಿತ ಸಮವಸ್ತ್ರ ವಿತರಣಾ ಪುಸ್ತಕ",
+      "ಉಚಿತ ಪಠ್ಯಪುಸ್ತಕ ವಿತರಣಾ ಪುಸ್ತಕ",
+      "ಶುಚಿ ಪ್ಯಾಡ್ ವಿತರಣಾ ಪುಸ್ತಕ",
+      "ಗ್ರಾಮ ಶಿಕ್ಷಣ ವಹಿ",
+      "ವೈದ್ಯಕೀಯ ತಪಾಸಣಾ ಪುಸ್ತಕ",
+      "ಶಿಕ್ಷಕರ ಹಾಜರಾತಿ ಪುಸ್ತಕ (ಹಾಲಿ)",
+      "ಶಿಕ್ಷಕರ ಹಾಜರಾತಿ ಪುಸ್ತಕ (ಹಳೆಯದು)",
+      "ವಿಜ್ಞಾನ ದಾಸ್ತಾನು ಪುಸ್ತಕ",
+      "ಗಣಿತ ದಾಸ್ತಾನು ಪುಸ್ತಕ",
+      "ನಲಿಕಲಿ ಕಿಟ್",
+      "ಶಾಲಾ ಆಸ್ತಿ ವಹಿ ಪುಸ್ತಕ",
+      "ಸಹಶಿಕ್ಷಕರ ನಡಾವಳಿ ಪುಸ್ತಕ",
+      "ಶಿಕ್ಷಕರ ಬಟವಾಡೆ ಪುಸ್ತಕ",
+      "ಶಿಕ್ಷಕರ ಪಾಠಪರಿವೀಕ್ಷಣಾ ಪುಸ್ತಕ",
+      "ಪೋಷಕರ ಸಭಾ ನಡಾವಳಿ",
+      "ಪೋಷಕರ ಸಭಾ ಜ್ಞಾಪನ ಪುಸ್ತಕ",
+      "ಹಳೇ ವಿದ್ಯಾರ್ಥಿಗಳ ಸಂಘದ ನಡಾವಳಿ ಪುಸ್ತಕ",
+      "ಫೀ-ವಸೂಲಾತಿ (5ನೇ ತರಗತಿ)",
+      "ಫೀ-ವಸೂಲಾತಿ (6ನೇ ತರಗತಿ)",
+      "ಫೀ-ವಸೂಲಾತಿ (7ನೇ ತರಗತಿ)",
+      "ನಗದು ಪುಸ್ತಕ - ಎಸ್.ಬಿ.ಖ",
+      "ನಗದು ಪುಸ್ತಕ - ಅಕ್ಷರ ದಾಸೋಹ",
+      "ನಗದು ಪುಸ್ತಕ - ಹೆಚ್.ಎಂ",
+      "ನಗದು ಪುಸ್ತಕ - ಶಿಕ್ಷಣದತ್ತು ನಿಧಿ",
+      "ನಗದು ಪುಸ್ತಕ - ಕೆನರಾ ಬ್ಯಾಂಕ್  ",
+      "ನಗದು ಪುಸ್ತಕ - ಮುಖ್ಯಶಿಕ್ಷಕರ ಬಾಕಿ",
+      "ಕ್ರೀಡಾ ಶುಲ್ಕ ಪುಸ್ತಕ",
+      "ಭಾರತ್ ಸೇವಾದಳ ಪುಸ್ತಕ",
+      "ಸ್ಕೌಟ್ ಪುಸ್ತಕ",
+      "ರಶೀದಿ ಪುಸ್ತಕ (5ನೇ ತರಗತಿ)",
+      "ರಶೀದಿ ಪುಸ್ತಕ (6ನೇ ತರಗತಿ)",
+      "ರಶೀದಿ ಪುಸ್ತಕ (7ನೇ ತರಗತಿ)",
+      "ಪಾಸ್ ಪುಸ್ತಕ - ಎಸ್.ಬಿ.ಖ",
+      "ಪಾಸ್ ಪುಸ್ತಕ - ಅಕ್ಷರ ದಾಸೋಹ",
+      "ಪಾಸ್ ಪುಸ್ತಕ - ಹೆಚ್.ಎಂ",
+      "ಪಾಸ್ ಪುಸ್ತಕ - ಶಿಕ್ಷಣದತ್ತು ನಿಧಿ",
+      "ಪಾಸ್ ಪುಸ್ತಕ - ಮುಖ್ಯಶಿಕ್ಷಕರ ಬಾಕಿ",
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಎಸ್.ಬಿ.ಖ",
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಅಕ್ಷರ ದಾಸೋಹ",
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಹೆಚ್.ಎಂ",
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಶಿಕ್ಷಣದತ್ತು ನಿಧಿ",
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಮುಖ್ಯಶಿಕ್ಷಕರ ಬಾಕಿ"
+    ]
+  },
+  {
+    id: "bankcheck",
+    title: "4. ಬ್ಯಾಂಕ್ ಚೆಕ್-ಪುಸ್ತಕಗಳ ವಿವರ",
+    qcap: "ಉಳಿದ ಚೆಕ್‌ಗಳ ಸಂಖ್ಯೆ",
+    items: [
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಎಸ್.ಬಿ.ಖ (ಬಾಕಿ ಇಂದ)",
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಅಕ್ಷರ ದಾಸೋಹ (ಬಾಕಿ ಇಂದ)",
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಹೆಚ್.ಎಂ (ಬಾಕಿ ಇಂದ)",
+      "ಚೆಕ್ ಪುಸ್ತಕ - ಶಿಕ್ಷಣದತ್ತು ನಿಧಿ (ಬಾಕಿ ಇಂದ)",
+      "ಪಾಸ್ ಪುಸ್ತಕ - ಕೆನರಾ ಬ್ಯಾಂಕ್  (ಬಾಕಿ ಇಂದ)"
+    ]
+  },
+  {
+    id: "aksharadasoha",
+    title: "5. ಅಕ್ಷರ ದಾಸೋಹ ಪುಸ್ತುಗಳ ದಾಸ್ತಾನು",
+    qcap: "ಸಂಖ್ಯೆ",
+    items: [
+      "ದೈನಂದಿನ ದಾಸ್ತಾನು ನಿರ್ವಹಣಾ ವಹಿ",
+      "ಮೊಟ್ಟೆ ನಮೂದು ಪುಸ್ತಕ",
+      "ಬೇಡಿಕೆ ಪುಸ್ತಕ",
+      "ಉಪಯೋಗಿತ ಪ್ರಮಾಣ ಪತ್ರ ಪುಸ್ತಕ",
+      "ರುಚಿ ನಮೂದು ಪುಸ್ತಕ",
+      "ಪಿ.ಎಂ. ಪೋಷಣ್ ವಹಿ",
+      "ಪಿ.ಎಂ. ಪೋಷಣ್ ನಡಾವಳಿ ವಹಿ",
+      "ಪಿ.ಎಂ. ಪೋಷಣ್ ಎತ್ತರ-ತೂಕ ವಹಿ",
+      "ತಕ್ಕಡಿ",
+      "ತಕ್ಕಡಿ ಬಟ್ಟುಗಳು (50ಗ್ರಾಂ, 100ಗ್ರಾಂ, 500ಗ್ರಾಂ, 1000ಗ್ರಾಂ, 2000ಗ್ರಾಂ, 5000ಗ್ರಾಂ - ಒಂದೊಂದು)",
+      "ಸ್ಟೌವ್",
+      "ಸಿಲಿಂಡರ್",
+      "ಇಡ್ಲಿ ಪಾತ್ರೆ",
+      "ಮಿಕ್ಸಿ",
+      "ಕುಕ್ಕರ್",
+      "ಬಾಂಡಲಿ",
+      "ಅಗ್ನಿನಂದಕ",
+      "ಜಗ್ ಸ್ಟೀಲ್",
+      "ಅನ್ನದ ಪಾತ್ರೆ",
+      "ನೀರಿನ ಡ್ರಂ",
+      "ಅನ್ನದ ಕೈ",
+      "ಸೌಟು",
+      "ಅಲ್ಯುಮಿನಿಯಂ ಡಬ್ಬ",
+      "ಪ್ಲಾಸ್ಟಿಕ್ ಡಬ್ಬ",
+      "ಸ್ಟೀಲ್ ಬಕೆಟ್",
+      "ಪ್ಲಾಸ್ಟಿಕ್ ಜಗ್",
+      "ಪ್ಲಾಸ್ಟಿಕ್ ಬಕೆಟ್",
+      "ಪ್ಲಾಸ್ಟಿಕ್ ಬಿಂದಿಗೆ",
+      "ಸ್ಟೀಲ್ ಡಬರಿ",
+      "ಪರಾತ ದೊಡ್ಡವು",
+      "ಅಲ್ಯುಮಿನಿಯಂ ತಪ್ಪಲೆ",
+      "ಕೈಬಟ್ಟಲು",
+      "ಜಾಲರ ಸ್ಟೀಲ್",
+      "ಸ್ಟೀಲ್ ಡಬರಿ ದೊಡ್ಡದು",
+      "ಅನ್ನದ ಪಾತ್ರೆ ಮುಚ್ಚಳ",
+      "ಸ್ಟೀಲ್ ಡಬರಿ ದೊಡ್ಡದು (2)",
+      "ಹಾಲಿನ ಡಬರಿ",
+      "ತುರಿಯುವ ಮಣೆ",
+      "ಚಾಕು",
+      "ಕಬ್ಬಿಣದ ಸ್ಟಾಂಡ್",
+      " ಗ್ಯಾಸ್ ಪುಸ್ತಕ",
+      "ಅಲ್ಯುಮಿನಿಯಂ ಡಬರಿ ದೊಡ್ಡದು",
+      "ತಟ್ಟೆ",
+      "Aqua Guard",
+      "ಲೋಟ",
+      "ಉಳಿಕೆ ಅಕ್ಕಿ",
+      "ಉಳಿಕೆ ಬೇಳೆ",
+      "ಉಳಿಕೆ ಎಣ್ಣೆ",
+      "ಉಳಿಕೆ ಹಾಲಿನ ಪುಡಿ",
+      "ಉಳಿಕೆ ರಾಗಿ ಮಾಲ್ಟ್"
+    ]
+  }
+];
+
+const STORAGE_KEY = "shala_charge_list_v2";
+const FIELD_IDS = ["f_school","f_cluster","f_taluk","f_date","f_persons"];
+
+/* Distinct accent color + icon per section (1 to 5), for quick visual identity */
+const ACCENTS = ["#7A2331", "#2F6B4F", "#1F4E79", "#B8863E", "#B5502E"];
+const ICONS   = ["📖", "🪑", "📚", "🏦", "🍲"];
+
+/* ================= BUILD UI ================= */
+const tabsEl = document.getElementById("tabs");
+const sectionsEl = document.getElementById("sections");
+
+function escapeHtml(str){
+  return String(str ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+
+SECTIONS.forEach((sec, sIdx) => {
+  const accent = ACCENTS[sIdx % ACCENTS.length];
+  const icon = ICONS[sIdx % ICONS.length];
+
+  // tab
+  const tab = document.createElement("button");
+  tab.className = "tab" + (sIdx === 0 ? " active" : "");
+  tab.dataset.target = sec.id;
+  tab.style.setProperty("--accent", accent);
+  tab.innerHTML = `<span class="n">${sIdx+1}</span>${sec.title.replace(/^\d+\.\s*/,"")}`;
+  tab.addEventListener("click", () => switchTab(sec.id));
+  tabsEl.appendChild(tab);
+
+  // section
+  const section = document.createElement("div");
+  section.className = "section" + (sIdx === 0 ? " active" : "");
+  section.id = "sec-" + sec.id;
+  section.style.setProperty("--accent", accent);
+
+  const head = document.createElement("div");
+  head.className = "section-head";
+  head.innerHTML = `
+    <span class="htitle">
+      <span class="icon">${icon}</span>
+      <h2>${sec.title}</h2>
+    </span>
+    <span class="section-count">${sec.items.length} ಸಾಲುಗಳು</span>`;
+  section.appendChild(head);
+
+  // School name banner — repeats on every section so it appears on every printed page
+  const schoolLine = document.createElement("div");
+  schoolLine.className = "section-school-line";
+  schoolLine.innerHTML = `<span class="lbl">ಶಾಲೆಯ ಹೆಸರು (School Name):</span><span class="val school-name-value"></span>`;
+  section.appendChild(schoolLine);
+
+  // Column headers for the two qty columns
+  const colHeads = document.createElement("div");
+  colHeads.className = "col-headers";
+  colHeads.innerHTML = `
+    <span class="idx-sp"></span>
+    <span class="label-sp"></span>
+    <span class="heads">
+      <span>ಸುಸ್ಥಿತಿ ಸಂಖ್ಯೆ</span>
+      <span>ಶಿಥಿಲ ಸಂಖ್ಯೆ</span>
+    </span>`;
+  section.appendChild(colHeads);
+
+  sec.items.forEach((label, i) => {
+    const row = document.createElement("div");
+    row.className = "row";
+    const okId = `q_${sec.id}_${i}_ok`;
+    const badId = `q_${sec.id}_${i}_bad`;
+    row.innerHTML = `
+      <span class="idx">${i+1}</span>
+      <span class="label">${label}</span>
+      <span class="qty-wrap">
+        <input type="text" inputmode="numeric" autocomplete="off" id="${okId}" placeholder="—">
+        <input type="text" inputmode="numeric" autocomplete="off" id="${badId}" placeholder="—">
+      </span>`;
+    section.appendChild(row);
+  });
+
+  // "hot button" row: lets the user add extra content not in the original list
+  const addWrap = document.createElement("div");
+  addWrap.className = "add-row-wrap";
+  addWrap.innerHTML = `
+    <button type="button" class="add-row-btn" data-section="${sec.id}">
+      <span class="plus">+</span> ಹೆಚ್ಚುವರಿ ವಿಷಯ ಸೇರಿಸಿ · Add item
+    </button>`;
+  section.appendChild(addWrap);
+
+  sectionsEl.appendChild(section);
+});
+
+document.querySelectorAll(".add-row-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const row = addCustomRow(btn.dataset.section);
+    row.querySelector(".custom-label").focus();
+    scheduleSave();
+  });
+});
+
+function addCustomRow(sectionId, presetLabel = "", presetQtyOk = "", presetQtyBad = ""){
+  const section = document.getElementById("sec-" + sectionId);
+  const addWrap = section.querySelector(".add-row-wrap");
+  const row = document.createElement("div");
+  row.className = "row custom-row";
+  row.innerHTML = `
+    <span class="idx">+</span>
+    <input type="text" class="custom-label" placeholder="ಹೊಸ ವಿಷಯದ ಹೆಸರು..." value="${escapeHtml(presetLabel)}">
+    <span class="qty-wrap">
+      <input type="text" inputmode="numeric" class="custom-qty-ok" autocomplete="off" placeholder="—" value="${escapeHtml(presetQtyOk)}">
+      <input type="text" inputmode="numeric" class="custom-qty-bad" autocomplete="off" placeholder="—" value="${escapeHtml(presetQtyBad)}">
+    </span>
+    <button type="button" class="del-row" title="ಅಳಿಸಿ">✕</button>`;
+  section.insertBefore(row, addWrap);
+  row.querySelector(".del-row").addEventListener("click", () => { row.remove(); scheduleSave(); });
+  return row;
+}
+
+function switchTab(id){
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.target === id));
+  document.querySelectorAll(".section").forEach(s => s.classList.toggle("active", s.id === "sec-"+id));
+  window.scrollTo({top: document.querySelector(".id-card").offsetTop - 10, behavior:"smooth"});
+}
+
+/* ================= AUTOSAVE ================= */
+const allStaticInputs = () => document.querySelectorAll('input[id^="q_"], input#f_school, input#f_cluster, input#f_taluk, input#f_date, input#f_persons');
+let saveTimer = null;
+const statusText = document.getElementById("saveStatusText");
+const statusDot = document.querySelector(".save-dot");
+
+function collectData(){
+  const data = { fields:{}, values:{}, custom:{} };
+  FIELD_IDS.forEach(id => { const el = document.getElementById(id); if(el) data.fields[id] = el.value; });
+  document.querySelectorAll('input[id^="q_"]').forEach(inp => { data.values[inp.id] = inp.value; });
+  SECTIONS.forEach(sec => {
+    const section = document.getElementById("sec-" + sec.id);
+    data.custom[sec.id] = [...section.querySelectorAll(".custom-row")].map(r => ({
+      label: r.querySelector(".custom-label").value,
+      qtyOk: r.querySelector(".custom-qty-ok").value,
+      qtyBad: r.querySelector(".custom-qty-bad").value
+    }));
+  });
+  return data;
+}
+
+function saveNow(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
+    statusText.textContent = "ಉಳಿಸಲಾಗಿದೆ · " + new Date().toLocaleTimeString('kn-IN', {hour:'2-digit', minute:'2-digit'});
+    statusDot.style.background = "#8FBF9B";
+  }catch(e){
+    statusText.textContent = "ಉಳಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ";
+    statusDot.style.background = "#D97757";
+  }
+}
+
+function scheduleSave(){
+  statusText.textContent = "ಉಳಿಸಲಾಗುತ್ತಿದೆ...";
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveNow, 500);
+}
+
+function loadSaved(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(!raw) { statusText.textContent = "ಸಿದ್ಧ"; syncSchoolName(); return; }
+  try{
+    const data = JSON.parse(raw);
+    if(data.fields) Object.keys(data.fields).forEach(id => { const el = document.getElementById(id); if(el) el.value = data.fields[id]; });
+    if(data.values) Object.keys(data.values).forEach(id => { const el = document.getElementById(id); if(el) el.value = data.values[id]; });
+    if(data.custom) Object.keys(data.custom).forEach(secId => {
+      (data.custom[secId] || []).forEach(item => addCustomRow(secId, item.label, item.qtyOk ?? item.qty ?? "", item.qtyBad ?? ""));
+    });
+    statusText.textContent = "ಹಿಂದಿನ ದತ್ತಾಂಶ ಲೋಡ್ ಆಗಿದೆ";
+  }catch(e){}
+  syncSchoolName();
+}
+
+/* ================= SCHOOL NAME BANNER SYNC ================= */
+/* Mirrors the School Name field into every section so it prints on every page */
+function syncSchoolName(){
+  const val = document.getElementById("f_school")?.value || "";
+  document.querySelectorAll(".school-name-value").forEach(el => { el.textContent = val; });
+}
+document.getElementById("f_school").addEventListener("input", syncSchoolName);
+
+document.addEventListener("input", (e) => {
+  if(e.target.tagName === "INPUT") scheduleSave();
+});
+
+/* ================= TOAST ================= */
+const toast = document.getElementById("toast");
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+/* ================= PRINT (all 5 forms, not just the open tab) ================= */
+function printAll(){
+  // Force every section visible as a fail-safe alongside the @media print rules,
+  // so all forms print no matter which tab was open or how the browser handles
+  // dynamically-hidden elements during print.
+  document.body.classList.add("printing");
+  window.print();
+}
+window.addEventListener("afterprint", () => document.body.classList.remove("printing"));
+// Fallback for browsers/webviews that don't fire afterprint reliably
+if (window.matchMedia) {
+  const mq = window.matchMedia("print");
+  mq.addEventListener?.("change", (e) => { if(!e.matches) document.body.classList.remove("printing"); });
+}
+
+document.getElementById("printBtn").addEventListener("click", printAll);
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if(confirm("ಎಲ್ಲಾ ನಮೂದುಗಳನ್ನು ಅಳಿಸಿ ಮರುಹೊಂದಿಸಬೇಕೇ? ಈ ಕ್ರಿಯೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗುವುದಿಲ್ಲ.\n\nClear all entries? This cannot be undone.")){
+    localStorage.removeItem(STORAGE_KEY);
+    allStaticInputs().forEach(inp => inp.value = "");
+    document.querySelectorAll(".custom-row").forEach(r => r.remove());
+    statusText.textContent = "ಮರುಹೊಂದಿಸಲಾಗಿದೆ";
+    syncSchoolName();
+    showToast("ಎಲ್ಲಾ ನಮೂದುಗಳನ್ನು ತೆರವುಗೊಳಿಸಲಾಗಿದೆ");
+  }
+});
+
+/* ================= INIT ================= */
+loadSaved();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <!-- ಇದು ಮೊಬೈಲ್‌ನಲ್ಲಿಯೂ ಡೆಸ್ಕ್‌ಟಾಪ್ ವ್ಯೂ ಬರುವುದನ್ನು ಖಚಿತಪಡಿಸುತ್ತದೆ -->
+    <meta name="viewport" content="width=1200, initial-scale=1.0">
+    <title>ನಿಮ್ಮ ಪೇಜ್ ಶೀರ್ಷಿಕೆ</title>
+</head>
+
+
+
+
+
+
+<style>
+@media print{
+  .no-print{
+    display:none !important;
+  }
+}
+</style>
+
+<div class="no-print" style="text-align:center;margin:15px 0;">
+  <a href="https://bilingualmediumschools.blogspot.com/2026/04/home-page.html"
+     target="_blank"
+     style="display:inline-block;
+            background:#1565c0;
+            color:#fff;
+            text-decoration:none;
+            padding:10px 18px;
+            border-radius:8px;
+            font-weight:bold;
+            font-size:16px;">
+<br> ರಚನೆ: ಮನೋಹರ್ ಆರ್‌ ಕೆ.ಜಿ.ಎಫ್<br>
+    🌐 School Resource Centre – Click Here to Visit
+  </a>
+</div>
