@@ -2,7 +2,10 @@
 <html lang="kn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="viewport" content="width=1200, initial-scale=1.0">
+<!-- Fixed width above (instead of device-width) makes mobile browsers render the
+     desktop layout — this page is a form meant to be filled/printed like the
+     desktop version, so mobile users get the same look and pinch-zoom to read/type. -->
 <title>ಶಾಲಾ ವಿಶಿಷ್ಟ ಚಾರ್ಜಿನ ವಿವರ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada:wght@400;500;600;700;800&family=Noto+Serif+Kannada:wght@500;600;700&family=Roboto+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -813,16 +816,34 @@ function setPrintMode(on){
 
 function printAll(){
   setPrintMode(true);
-  window.print();
-  // window.print() blocks in most desktop browsers until the dialog closes,
-  // so this runs right after; afterprint below covers browsers where it doesn't.
-  setPrintMode(false);
+  // Give the browser a moment to reflow/paint the now-expanded content before
+  // opening print — mobile browsers especially need this, since window.print()
+  // there is often ASYNCHRONOUS (unlike most desktop browsers, where it blocks
+  // until the dialog closes). We deliberately do NOT revert visibility right
+  // after calling window.print(): on mobile that was reverting the expanded
+  // sections before the print pipeline finished capturing them, so only the
+  // currently-open tab ended up in the printout. Restoration now happens only
+  // via the afterprint/matchMedia events below, plus a generous fallback timer.
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.print();
+      schedulePrintFallbackRestore();
+    });
+  });
 }
-window.addEventListener("afterprint", () => setPrintMode(false));
+let printFallbackTimer = null;
+function schedulePrintFallbackRestore(){
+  clearTimeout(printFallbackTimer);
+  // Safety net for mobile browsers/webviews that never fire afterprint or a
+  // matchMedia("print") change event — restores the normal tabbed view after
+  // a generous delay so the page doesn't stay stuck in "all sections expanded" mode.
+  printFallbackTimer = setTimeout(() => setPrintMode(false), 20000);
+}
+window.addEventListener("afterprint", () => { clearTimeout(printFallbackTimer); setPrintMode(false); });
 // Fallback for browsers/webviews that don't fire afterprint reliably
 if (window.matchMedia) {
   const mq = window.matchMedia("print");
-  mq.addEventListener?.("change", (e) => { if(!e.matches) setPrintMode(false); });
+  mq.addEventListener?.("change", (e) => { if(!e.matches){ clearTimeout(printFallbackTimer); setPrintMode(false); } });
 }
 
 document.getElementById("printBtn").addEventListener("click", printAll);
